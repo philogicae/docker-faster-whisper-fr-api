@@ -3,6 +3,7 @@ import base64
 from rich import print
 from dotenv import load_dotenv
 from os import getenv
+from json import dumps
 
 load_dotenv()
 
@@ -30,10 +31,12 @@ def load_wav(filename):
 
 
 def save_output(filename, result):
+    if "stats" in result:
+        with open("output/" + filename + "-data.txt", "w", encoding="utf-8") as f:
+            f.write("\n".join([" -> ".join(item) for item in result["stats"]]))
+    del result["stats"]
     with open("output/" + filename + ".txt", "w", encoding="utf-8") as f:
-        f.write(result["text"])
-    with open("output/" + filename + "-data.txt", "w", encoding="utf-8") as f:
-        f.write("\n".join([" -> ".join(item) for item in result["stats"]]))
+        f.write(dumps(result, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":
