@@ -37,11 +37,11 @@ def save_output(filename, result):
 
 
 if __name__ == "__main__":
-    # data = {"file_url": getenv("AUDIO_URL")}
-    data = {"file_raw": load_wav(input("Filename .wav: "))}
-
+    params = dict()
+    # data = dict(file_url= getenv("AUDIO_URL"), params= params)
+    data = dict(file_raw=load_wav(input("Filename .wav: ")), params=params)
+    # data = "schema"
     # result = sync_call(data)
     result = async_call(data)()
-
     print(result)
     save_output("test", result)

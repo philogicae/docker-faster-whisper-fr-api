@@ -1,11 +1,3 @@
-#FROM python:3.11.1
-#RUN apt-get update --fix-missing
-#WORKDIR /app
-#COPY ./src/* ./
-#RUN pip install --upgrade pip
-#RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
-#CMD ["uvicorn", "app:app", "--host", "::", "--port", "80", "--log-level", "info"]
-
 FROM nvidia/cuda:11.7.1-cudnn8-runtime-ubuntu20.04
 RUN rm -f /etc/apt/sources.list.d/*.list
 SHELL ["/bin/bash", "-c"]

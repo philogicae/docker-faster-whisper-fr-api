@@ -11,16 +11,19 @@ class Transcriber:
             self.model_path, self.device, compute_type=self.compute_type
         )
 
-    def process(self, file):
-        segments, _ = self.model.transcribe(
-            file,
-            language="fr",
-            vad_filter=True,
-            beam_size=8,
-            best_of=12,
-            temperature=[0.65, 0.70, 0.75, 0.80],
-            word_timestamps=True,
+    def process(self, file, custom_params: dict = {}):
+        params = (
+            dict(
+                language="fr",
+                word_timestamps=True,
+                vad_filter=True,
+                beam_size=8,
+                best_of=12,
+                temperature=[0.65, 0.70, 0.75, 0.80],
+            )
+            | custom_params
         )
+        segments, _ = self.model.transcribe(file, **params)
         text, stats = "", []
         for segment in segments:
             for word in segment.words:
@@ -34,4 +37,4 @@ class Transcriber:
                 )
         text = text.strip()
         stats = list(sorted(stats, key=lambda x: x[2]))
-        return text, stats
+        return dict(text=text, stats=stats, params=params)
