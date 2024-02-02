@@ -34,13 +34,15 @@ def save_output(filename, result):
     if "stats" in result:
         with open("output/" + filename + "-data.txt", "w", encoding="utf-8") as f:
             f.write("\n".join([" -> ".join(item) for item in result["stats"]]))
-    del result["stats"]
+        del result["stats"]
     with open("output/" + filename + ".txt", "w", encoding="utf-8") as f:
         f.write(dumps(result, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":
-    params = dict()
+    params = dict(
+        prefix="Assistant: Bonjour, bienvenue chez Salade2Fruits, votre grossiste fruits et légumes. Comment puis-je vous aider ? Souhaitez-vous passer commande ?\nClient: "
+    )
     # data = dict(file_url= getenv("AUDIO_URL"), params= params)
     data = dict(file_raw=load_wav(input("Filename .wav: ")), params=params)
     # data = "schema"

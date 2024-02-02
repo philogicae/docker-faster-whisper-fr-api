@@ -5,6 +5,7 @@ import runpod
 from time import time as now
 from transcriber import Transcriber
 from schema import get_schema_serverless, is_valid_params
+from urllib import parse
 
 MODEL = Transcriber()
 
@@ -31,7 +32,14 @@ def faster_whisper_fr(job):
             params = job_input.get("params", {})
             if is_valid_params(params):
                 if "file_raw" in job_input:
-                    audio_input = base64_to_tempfile(job_input["file_raw"])
+                    urlEncoded = (
+                        job_input["urlEncoded"] if "urlEncoded" in job_input else False
+                    )
+                    audio_input = base64_to_tempfile(
+                        parse.unquote(job_input["file_raw"])
+                        if urlEncoded
+                        else job_input["file_raw"]
+                    )
                 elif "file_url" in job_input:
                     with rp_debugger.LineTimer("download_step"):
                         audio_input = download_file(job["id"], [job_input["file_url"]])

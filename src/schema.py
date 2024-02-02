@@ -46,6 +46,7 @@ def get_schema_serverless():
             for_transcribe=dict(
                 input=dict(
                     file_raw="base64_file.wav",
+                    urlEncoded="bool",
                     file_url="str",
                     params=PARAMS,
                 )
