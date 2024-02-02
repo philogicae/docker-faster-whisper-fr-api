@@ -2,3 +2,4 @@ faster-whisper
 fastapi
 python-multipart
 uvicorn
+runpod

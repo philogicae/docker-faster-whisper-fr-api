@@ -1,5 +1,6 @@
 from fastapi import FastAPI, UploadFile, HTTPException
 from transcriber import Transcriber
+from io import BytesIO
 from time import time as now
 import logging
 
@@ -28,7 +29,7 @@ async def transcribe(file: UploadFile):
     started = now()
     logger.info(f"FILE: {file.filename} - Start processing...")
     try:
-        text, stats = model.process(await file.read())
+        text, stats = model.process(BytesIO(await file.read()))
     except Exception as e:
         raise HTTPException(
             status_code=500, detail="Error during transcription: " + str(e)

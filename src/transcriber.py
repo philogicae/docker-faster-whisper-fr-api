@@ -1,6 +1,4 @@
 from faster_whisper import WhisperModel
-from fastapi import File
-from io import BytesIO
 
 
 class Transcriber:
@@ -13,9 +11,9 @@ class Transcriber:
             self.model_path, self.device, compute_type=self.compute_type
         )
 
-    def process(self, file: bytes = File(...)):
+    def process(self, file):
         segments, _ = self.model.transcribe(
-            BytesIO(file),
+            file,
             language="fr",
             vad_filter=True,
             beam_size=8,
