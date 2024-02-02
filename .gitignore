@@ -130,7 +130,10 @@ dmypy.json
 .DS_Store
 # End of https://www.gitignore.io/api/python
 
+# Workspace
 .vscode
 .github
 .devcontainer
 src/jobs
+input
+output
