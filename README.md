@@ -1,4 +1,4 @@
-# docker-faster-whisper-fr-api
+# Docker - Faster Whisper FR - API
 
 Model: [Philogicae/whisper-large-v3-french-ct2](https://huggingface.co/Philogicae/whisper-large-v3-french-ct2)
 

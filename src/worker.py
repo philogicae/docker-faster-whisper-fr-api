@@ -1,7 +1,7 @@
-import base64
-import tempfile
+from base64 import b64decode
+from tempfile import NamedTemporaryFile
+from runpod import serverless
 from runpod.serverless.utils import download_files_from_urls, rp_cleanup, rp_debugger
-import runpod
 from time import time as now
 from transcriber import Transcriber
 from schema import get_schema_serverless, is_valid_params
@@ -11,8 +11,8 @@ MODEL = Transcriber()
 
 
 def base64_to_tempfile(base64_file: str) -> str:
-    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
-        temp_file.write(base64.b64decode(base64_file))
+    with NamedTemporaryFile(suffix=".wav", delete=False) as temp_file:
+        temp_file.write(b64decode(base64_file))
     return temp_file.name
 
 
@@ -21,7 +21,7 @@ def download_file(jobId, file_url):
 
 
 @rp_debugger.FunctionTimer
-def faster_whisper_fr(job):
+def worker(job):
     started = now()
     job_input = job["input"]
     result = {}
@@ -32,12 +32,9 @@ def faster_whisper_fr(job):
             params = job_input.get("params", {})
             if is_valid_params(params):
                 if "file_raw" in job_input:
-                    urlEncoded = (
-                        job_input["urlEncoded"] if "urlEncoded" in job_input else False
-                    )
                     audio_input = base64_to_tempfile(
                         parse.unquote(job_input["file_raw"])
-                        if urlEncoded
+                        if job_input.get("urlEncoded", False)
                         else job_input["file_raw"]
                     )
                 elif "file_url" in job_input:
@@ -57,4 +54,4 @@ def faster_whisper_fr(job):
     return result | {"time": now() - started}
 
 
-runpod.serverless.start({"handler": faster_whisper_fr})
+serverless.start({"handler": worker})

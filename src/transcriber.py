@@ -1,8 +1,9 @@
+from os import getenv
 from faster_whisper import WhisperModel
 
 
 class Transcriber:
-    model_path = "Philogicae/whisper-large-v3-french-ct2"
+    model_path = getenv("MODEL", "Philogicae/whisper-large-v3-french-ct2")
     device = "cuda"
     compute_type = "int8_float16"
 

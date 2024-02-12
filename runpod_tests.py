@@ -1,5 +1,5 @@
 import runpod
-import base64
+from base64 import b64encode
 from rich import print
 from dotenv import load_dotenv
 from os import getenv
@@ -27,7 +27,7 @@ def async_call(data):
 
 def load_wav(filename):
     with open("input/" + filename + ".wav", "rb") as f:
-        return base64.b64encode(f.read()).decode("utf-8")
+        return b64encode(f.read()).decode("utf-8")
 
 
 def save_output(filename, result):
@@ -40,13 +40,12 @@ def save_output(filename, result):
 
 
 if __name__ == "__main__":
+    print(async_call({"schema": True})())
     params = dict(
         prefix="Assistant: Bonjour, bienvenue chez Salade2Fruits, votre grossiste fruits et légumes. Comment puis-je vous aider ? Souhaitez-vous passer commande ?\nClient: "
     )
     # data = dict(file_url= getenv("AUDIO_URL"), params= params)
     data = dict(file_raw=load_wav(input("Filename .wav: ")), params=params)
-    # data = "schema"
-    # result = sync_call(data)
     result = async_call(data)()
     print(result)
     save_output("test", result)

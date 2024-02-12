@@ -26,4 +26,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --upgrade pip && \
     pip install -r ./requirements.txt --no-cache-dir && \
     rm ./requirements.txt
+ENV MODEL="Philogicae/whisper-large-v3-french-ct2"
+ENV HF_HOME="/"
+RUN python3 download_model.py
 CMD ["python3", "./worker.py"]
